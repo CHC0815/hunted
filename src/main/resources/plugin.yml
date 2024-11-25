@@ -1,0 +1,15 @@
+main: team.cophee.huntedplugin.HuntedPlugin
+name: HuntedPlugin
+version: 0.0.1
+description: Fun plugin :)
+api-version: 1.21
+Author: Conrad Heinrich Carl
+
+commands:
+  start:
+    description: Starts the game mode
+    usage: /start
+  hunter:
+    description: Assigns a player as the first hunter
+    usage: /hunter [PLAYER]
+

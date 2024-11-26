@@ -3,7 +3,6 @@ package team.cophee.huntedplugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +17,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.util.Objects;
 
 public class HuntedPlugin extends JavaPlugin implements  Listener {
 
@@ -32,7 +30,7 @@ public class HuntedPlugin extends JavaPlugin implements  Listener {
 
     @Override
     public void onDisable() {
-        getServer().getOnlinePlayers().forEach(this::resetPlayerState);
+        getServer().getOnlinePlayers().forEach(Util::resetPlayerState);
     }
 
     @EventHandler
@@ -72,6 +70,7 @@ public class HuntedPlugin extends JavaPlugin implements  Listener {
         Player killer = player.getKiller();
 
         player.setGameMode(GameMode.SPECTATOR);
+        Util.resetPlayerState(player);
         hunted.alive.remove(player);
 
         if (killer == null || player == killer) {
@@ -110,15 +109,8 @@ public class HuntedPlugin extends JavaPlugin implements  Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        resetPlayerState(player);
+        Util.resetPlayerState(player);
     }
 
-    public void resetPlayerState(Player player) {
-        Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).setBaseValue(20.0);
-        player.setHealth(20.0);
 
-        player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-        Objects.requireNonNull(player.getAttribute(Attribute.ATTACK_DAMAGE)).setBaseValue(1.0);
-        Objects.requireNonNull(player.getAttribute(Attribute.MOVEMENT_SPEED)).setBaseValue(0.1);
-    }
 }
